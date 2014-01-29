@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">OrthodoxyIcons</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_list_view">В виде списка</string>
+ <string name="title_gallery_view">В виде галлереи</string>
+ <string name="title_detail_view">Детальный просмотр</string>
+
+</resources>
