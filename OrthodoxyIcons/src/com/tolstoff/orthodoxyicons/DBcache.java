@@ -20,7 +20,7 @@ public class DBcache {
 			+ COLUMN_PREVIEW_GALLERY + " text," + COLUMN_DETAIL + " text"
 			+ ");";
 	
-	private void WriteResult(ArrayLst<titleImage>, AttayList) {
+	private void WriteResult(ArrayLst<titleImage11111111>, AttayList) {
 		dbHelper = new DBHelper(context);
 
 		ContentValues cv = new ContentValues();
