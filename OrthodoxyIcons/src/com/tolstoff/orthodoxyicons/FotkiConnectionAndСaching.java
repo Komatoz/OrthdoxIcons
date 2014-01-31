@@ -18,10 +18,8 @@ import android.os.AsyncTask;
 
 public class FotkiConnectionAnd—aching extends AsyncTask<String, Void, Void> {
 
-	private ArrayList<String> titleImage = new ArrayList<String>();
-	private ArrayList<String> listImageUrls = new ArrayList<String>();
-	private ArrayList<String> galleryImageUrls = new ArrayList<String>();
-	private ArrayList<String> detailImageUrls = new ArrayList<String>();
+	private String titleImage = null, listImageUrls = null,
+			galleryImageUrls = null, detailImageUrls = null;
 
 	private ApiProcessicngListener listener;
 
@@ -99,6 +97,9 @@ public class FotkiConnectionAnd—aching extends AsyncTask<String, Void, Void> {
 
 		XmlPullParser xpp;
 
+		DBcache mDBcache = new DBcache(context);
+		
+
 		try {
 			xpp = prepareXmlParser(inputStream);
 
@@ -110,7 +111,7 @@ public class FotkiConnectionAnd—aching extends AsyncTask<String, Void, Void> {
 					// œ‡ÒËÏ Ì‡Á‚‡ÌËˇ Í‡ÚËÌÓÍ (ÚÂÚËÈ ÛÓ‚ÂÌ¸)
 					if (tagName.equals("title")) {
 						if (xpp.getDepth() == 3) {
-							titleImage.add(xpp.nextText());
+							titleImage = xpp.nextText();
 							// LogT.log(titleImage.get(titleImage.size()-1));
 						}
 
@@ -121,25 +122,35 @@ public class FotkiConnectionAnd—aching extends AsyncTask<String, Void, Void> {
 
 						if (xpp.getAttributeValue(null, "size")
 								.equalsIgnoreCase("XS")) {
-							listImageUrls.add((xpp.getAttributeValue(null,
-									"href")));
+							listImageUrls = xpp.getAttributeValue(null, "href");
 
 						}
 
 						if (xpp.getAttributeValue(null, "size")
 								.equalsIgnoreCase("M")) {
-							galleryImageUrls.add((xpp.getAttributeValue(null,
-									"href")));
+							galleryImageUrls = xpp.getAttributeValue(null,
+									"href");
 
 						}
 						if (xpp.getAttributeValue(null, "size")
 								.equalsIgnoreCase("orig")) {
-							detailImageUrls.add((xpp.getAttributeValue(null,
-									"href")));
+							detailImageUrls = xpp.getAttributeValue(null,
+									"href");
 
 						}
 
 					}
+
+				}
+
+				if (titleImage != null && listImageUrls != null
+						&& galleryImageUrls != null && detailImageUrls != null) {
+					
+					mDBcache.WriteResultToDb(titleImage, listImageUrls, galleryImageUrls, detailImageUrls);
+					titleImage = null;
+					listImageUrls = null;
+					galleryImageUrls = null;
+					detailImageUrls = null;
 
 				}
 
@@ -149,7 +160,7 @@ public class FotkiConnectionAnd—aching extends AsyncTask<String, Void, Void> {
 
 			LogT.log("END_DOCUMENT");
 
-			WriteResultToDb();
+			
 
 		}
 
@@ -178,8 +189,6 @@ public class FotkiConnectionAnd—aching extends AsyncTask<String, Void, Void> {
 
 	}
 
-	
-
 	@Override
 	protected void onPostExecute(Void result) {
 		// TODO Auto-generated method stub
@@ -188,17 +197,8 @@ public class FotkiConnectionAnd—aching extends AsyncTask<String, Void, Void> {
 		listener.ApiProcessinDone();
 	}
 
-	public ArrayList<String> getTitleImage() {
-		this.execute();
 
-		return titleImage;
-	}
-
-	public ArrayList<String> getPreviewImageURL() {
-		return listImageUrls;
-	}
-
-	public ArrayList<String> getDetailImageUrls() {
+	public String  getDetailImageUrls() {
 		this.execute();
 		return detailImageUrls;
 	}

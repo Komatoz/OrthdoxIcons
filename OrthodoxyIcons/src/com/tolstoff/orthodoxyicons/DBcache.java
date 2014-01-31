@@ -19,8 +19,15 @@ public class DBcache {
 			+ COLUMN_TITLE + " text," + COLUMN_PREVIEW_LIST + " text,"
 			+ COLUMN_PREVIEW_GALLERY + " text," + COLUMN_DETAIL + " text"
 			+ ");";
-	
-	private void WriteResult(ArrayLst<String> titleImage) {
+
+	public DBcache(Context context) {
+
+		this.context = context;
+
+	}
+
+	private void WriteResult(String titleImage, String listImageUrls,
+			String galleryImageUrls, String detailImageUrls) {
 		dbHelper = new DBHelper(context);
 
 		ContentValues cv = new ContentValues();
@@ -37,16 +44,13 @@ public class DBcache {
 		}
 
 		db = dbHelper.getWritableDatabase();
-		for (int i = 0; i < titleImage.size(); i++) {
 
-			cv.put(DBHelper.COLUMN_TITLE, titleImage.get(i));
-			cv.put(DBHelper.COLUMN_PREVIEW_LIST, listImageUrls.get(i));
-			cv.put(DBHelper.COLUMN_PREVIEW_GALLERY, galleryImageUrls.get(i));
-			cv.put(DBHelper.COLUMN_DETAIL, detailImageUrls.get(i));
+		cv.put(COLUMN_TITLE, titleImage);
+		cv.put(COLUMN_PREVIEW_LIST, listImageUrls);
+		cv.put(COLUMN_PREVIEW_GALLERY, galleryImageUrls);
+		cv.put(COLUMN_DETAIL, detailImageUrls);
 
-			db.insert(DBHelper.DATABASE_NAME, null, cv);
-
-		}
+		db.insert(DATABASE_NAME, null, cv);
 
 		// //“естовое чтение
 		//
@@ -83,38 +87,36 @@ public class DBcache {
 
 		dbHelper.close();
 
-		LogT.backupDB(context, DBHelper.DATABASE_NAME);
+		LogT.backupDB(context, DATABASE_NAME);
 
 	}
-	
+
+	  // получить все данные из таблицы DB_TABLE
+	  public Cursor getAllData() {
+	    return mDB.query(DB_TABLE, null, null, null, null, null, null);
+	  }
 	
 	
 	
 	
 	class DBHelper extends SQLiteOpenHelper {
-		
 
-		
-		
-		public DBHelper (Context context)
-		{
-			
-		super (context, DATABASE_NAME, null, 1);	
-			
-		
-		
+		public DBHelper(Context context) {
+
+			super(context, DATABASE_NAME, null, 1);
+
 		}
-		
+
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-		   db.execSQL(DATABASE_CREATE_SCRIPT);
-			
+			db.execSQL(DATABASE_CREATE_SCRIPT);
+
 		}
-		
+
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	}
