@@ -10,11 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -79,8 +79,9 @@ public class FragmentGallery extends Fragment implements
 	}
 
 	@Override
-	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 	//	return cursor;	
+		imageAdapter.swapCursor(cursor);
 
 	}
 
@@ -112,7 +113,7 @@ public class FragmentGallery extends Fragment implements
 		// startActivity(intent);
 	}
 
-	public class ImageAdapter extends BaseAdapter {
+	public class ImageAdapter extends CursorAdapter   {
 		@Override
 		public int getCount() {
 			return imageUrls.size();
