@@ -186,7 +186,7 @@ public class FotkiConnectionAndСaching extends AsyncTask<String, Void, Void> {
 
 			LogT.log("END_DOCUMENT");
 
-			// Переход на следующую странциу ссылок
+			// Переход на следующую странциу ссылок (всего 6 страниц)
 			if (nextPageUrl != "" && thisPage != 6) {
 				thisPage++;
 				connectForUrlImages(nextPageUrl);
