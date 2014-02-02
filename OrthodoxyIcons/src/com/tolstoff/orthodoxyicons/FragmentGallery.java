@@ -3,12 +3,12 @@ package com.tolstoff.orthodoxyicons;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.content.CursorLoader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +25,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingProgressListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+
+
 
 public class FragmentGallery extends Fragment implements
 		LoaderCallbacks<Cursor> {
@@ -60,7 +62,7 @@ public class FragmentGallery extends Fragment implements
 
 
 
-		getLoaderManager().initLoader(0, null,  this);
+		this.getActivity().getSupportLoaderManager().initLoader(0, null,  this);
 
 		listView = (GridView) galleryFragmentView.findViewById(R.id.gridview);
 
@@ -71,14 +73,14 @@ public class FragmentGallery extends Fragment implements
 		return galleryFragmentView;
 	}
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle bnd) {
+	  @Override
+	  public Loader<Cursor> onCreateLoader(int id, Bundle bndl) {
 		return new DBCursorLoader(getActivity(), dbCache);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
-		return cursor;	
+	//	return cursor;	
 
 	}
 
@@ -194,7 +196,7 @@ public class FragmentGallery extends Fragment implements
 		}
 	}
 
-	static class DBCursorLoader extends CursorLoader {
+	static class DBCursorLoader extends CursorLoader{
 		DBcache dbCache;
 
 		public DBCursorLoader (Context context, DBcache dbCache) {
