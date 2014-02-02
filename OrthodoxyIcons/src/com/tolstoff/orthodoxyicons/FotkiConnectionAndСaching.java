@@ -183,7 +183,7 @@ public class FotkiConnectionAndСaching extends AsyncTask<String, Void, Void> {
 				xpp.next();
 
 			}
-
+     
 			LogT.log("END_DOCUMENT");
 
 			// Переход на следующую странциу ссылок (всего 6 страниц)
@@ -209,7 +209,7 @@ public class FotkiConnectionAndСaching extends AsyncTask<String, Void, Void> {
 			throws XmlPullParserException {
 
 		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-		// включаем поддержку namespace (по умолчанию выключена)
+		// включаем поддержку namespace (по умолчанию выключена)  
 		factory.setNamespaceAware(true);
 
 		XmlPullParser xpp = factory.newPullParser();
