@@ -2,16 +2,14 @@ package com.tolstoff.orthodoxyicons;
 
 import java.util.ArrayList;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -26,7 +24,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
 
 
-public class FragmentGallery extends Fragment implements ApiProcessicngListener {
+public class FragmentGallery extends Fragment {
 	
 
 	DisplayImageOptions options;
@@ -61,13 +59,16 @@ public class FragmentGallery extends Fragment implements ApiProcessicngListener 
 		imageLoader =  ImageLoader.getInstance();
 		imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
 		
-		yandexFotkiApi = FotkiConnectionAnd—aching.getInstance();
-		yandexFotkiApi.setContext(getActivity());
-		yandexFotkiApi.setListener(this);
-		
-		yandexFotkiApi.execute();
-		
+//		yandexFotkiApi = FotkiConnectionAnd—aching.getInstance();
+//		yandexFotkiApi.setContext(getActivity());
+//		yandexFotkiApi.setListener(this);
+//		
+//		yandexFotkiApi.execute();
+//		
 
+//		getSupportLoaderManager().initLoader(0, null, getActivity());
+		
+		
 		listView = (GridView)galleryFragmentView.findViewById(R.id.gridview);
 		
 		
@@ -75,19 +76,27 @@ public class FragmentGallery extends Fragment implements ApiProcessicngListener 
 		return  galleryFragmentView;
 	}
 	
-	@Override
-	public void ApiProcessinDone() {
-
-	imageUrls = yandexFotkiApi.getPreviewImageURL();
-	((GridView) listView).setAdapter(new ImageAdapter());
-	listView.setOnItemClickListener(new OnItemClickListener() {
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			startImagePagerActivity(position);
-		}
-	});
 	
+	public void getDataFromDB(){
+		
+		
+		
+		
 	}
+	
+//	@Override
+//	public void ApiProcessinDone() {
+//
+//	imageUrls = yandexFotkiApi.getPreviewImageURL();
+//	((GridView) listView).setAdapter(new ImageAdapter());
+//	listView.setOnItemClickListener(new OnItemClickListener() {
+//		@Override
+//		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//			startImagePagerActivity(position);
+//		}
+//	});
+//	
+//	}
 
 	
 	private void startImagePagerActivity(int position) {

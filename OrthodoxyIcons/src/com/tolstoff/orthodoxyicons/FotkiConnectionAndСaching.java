@@ -23,7 +23,12 @@ public class FotkiConnectionAndÑaching extends AsyncTask<String, Void, Void> {
 
 	private ApiProcessicngListener listener;
 
+	private String nextPageUrl = "";
+	private int thisPage = 1;
+
 	private Context context;
+
+	DBcache mDBcache;
 
 	public FotkiConnectionAndÑaching(Context context) {
 		this.context = context;
@@ -32,6 +37,9 @@ public class FotkiConnectionAndÑaching extends AsyncTask<String, Void, Void> {
 
 	@Override
 	protected Void doInBackground(String... url) {
+		 mDBcache = new DBcache(context);
+		mDBcache.open();
+		mDBcache.clear();
 		try {
 
 			connectForUrlImages(url[0]);
@@ -40,11 +48,19 @@ public class FotkiConnectionAndÑaching extends AsyncTask<String, Void, Void> {
 		} catch (IOException e) {
 
 		}
+
+		mDBcache.close();
+		LogT.backupDB(context, "OrthodoxIconsDB");
+
 		return null;
 	}
 
 	private void connectForUrlImages(String urlAlbumCollection)
 			throws IOException {
+		titleImage = null; 
+		listImageUrls = null; 
+		galleryImageUrls = null; 
+		detailImageUrls = null;
 
 		InputStream inputStream = null;
 
@@ -94,11 +110,8 @@ public class FotkiConnectionAndÑaching extends AsyncTask<String, Void, Void> {
 	private void xmlParser(InputStream inputStream) {
 
 		String tagName = "";
-
+		nextPageUrl = "";
 		XmlPullParser xpp;
-
-		DBcache mDBcache = new DBcache(context);
-		
 
 		try {
 			xpp = prepareXmlParser(inputStream);
@@ -115,6 +128,15 @@ public class FotkiConnectionAndÑaching extends AsyncTask<String, Void, Void> {
 							// LogT.log(titleImage.get(titleImage.size()-1));
 						}
 
+					}
+
+					// Ññûëêà íà ñëåäóþùóþ ñòðàíèöó
+					if (tagName.equals("link")
+							&& xpp.getDepth() == 2
+							&& xpp.getAttributeValue(null, "rel")
+									.equalsIgnoreCase("next")) {
+						nextPageUrl = xpp.getAttributeValue(null, "href");
+						LogT.log(xpp.getAttributeValue(null, "href"));
 					}
 
 					// Ïàðñèì ññûëêè íà ïðåâüþ êàðòèíîê
@@ -145,8 +167,12 @@ public class FotkiConnectionAndÑaching extends AsyncTask<String, Void, Void> {
 
 				if (titleImage != null && listImageUrls != null
 						&& galleryImageUrls != null && detailImageUrls != null) {
-					
-					mDBcache.WriteResultToDb(titleImage, listImageUrls, galleryImageUrls, detailImageUrls);
+					// LogT.log(titleImage + " " + listImageUrls + " " +
+					// galleryImageUrls + " " + detailImageUrls);
+
+					mDBcache.WriteResult(titleImage, listImageUrls,
+							galleryImageUrls, detailImageUrls);
+
 					titleImage = null;
 					listImageUrls = null;
 					galleryImageUrls = null;
@@ -160,7 +186,11 @@ public class FotkiConnectionAndÑaching extends AsyncTask<String, Void, Void> {
 
 			LogT.log("END_DOCUMENT");
 
-			
+			// Ïåðåõîä íà ñëåäóþùóþ ñòðàíöèó ññûëîê
+			if (nextPageUrl != "" && thisPage != 6) {
+				thisPage++;
+				connectForUrlImages(nextPageUrl);
+			}
 
 		}
 
@@ -191,14 +221,12 @@ public class FotkiConnectionAndÑaching extends AsyncTask<String, Void, Void> {
 
 	@Override
 	protected void onPostExecute(Void result) {
-		// TODO Auto-generated method stub
 
 		super.onPostExecute(result);
-		listener.ApiProcessinDone();
+		// listener.ApiProcessinDone();
 	}
 
-
-	public String  getDetailImageUrls() {
+	public String getDetailImageUrls() {
 		this.execute();
 		return detailImageUrls;
 	}

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -15,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -22,45 +22,36 @@ import android.view.ViewGroup;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements
+public class MainActivity extends FragmentActivity implements
 		ActionBar.OnNavigationListener {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
 	 * current dropdown position.
 	 */
-	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";	
+	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 	final List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
 	Map<String, Object> map;
 	YandexApiHelper yandexApiHelper;
-	
-	ArrayList<String> titile = new ArrayList<String>();
-	ArrayList<String> preview = new ArrayList<String>();
-	
-	
-	DBHelper dbHelper;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
 		actionBarInit();
-         
-		yandexApiHelper =YandexApiHelper.getInstance();
+
+		yandexApiHelper = YandexApiHelper.getInstance();
 		yandexApiHelper.setContex(this);
-		
+		yandexApiHelper.connectToGetCash();
+		// LogT.backupDB(this, "OrthodoxIconsDB");
+		// yandexApiHelper.getNameFromCache();
 
 		LogT.log("Соединение: " + isNetWorkAvailable());
 
-//		yandexFotkiApi.execute();
-
-	
+		// yandexFotkiApi.execute();
 
 	}
-
-
-	
 
 	// public void ApiProcessinDone() {
 	//
@@ -82,24 +73,25 @@ public class MainActivity extends Activity implements
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
-//		 map = new HashMap<String, Object>();
-//		 map.put("title",
-//		 getResources().getString(R.string.title_gallery_view));
-//		 map.put("fragment",
-//		 Fragment.instantiate(this, FragmentGallery.class.getName()));
-//		 data.add(map);
+		// map = new HashMap<String, Object>();
+		// map.put("title",
+		// getResources().getString(R.string.title_gallery_view));
+		// map.put("fragment",
+		// Fragment.instantiate(this, FragmentGallery.class.getName()));
+		// data.add(map);
 
-//		map = new HashMap<String, Object>();
-//		map.put("title", getResources().getString(R.string.title_list_view));
-//		map.put("fragment",
-//				Fragment.instantiate(this, FragmentList.class.getName()));
-//		data.add(map);
-//
-//		map = new HashMap<String, Object>();
-//		map.put("title", getResources().getString(R.string.title_detail_view));
-//		map.put("fragment",
-//				Fragment.instantiate(this, FragmentDetailView.class.getName()));
-//		data.add(map);
+		// map = new HashMap<String, Object>();
+		// map.put("title", getResources().getString(R.string.title_list_view));
+		// map.put("fragment",
+		// Fragment.instantiate(this, FragmentList.class.getName()));
+		// data.add(map);
+		//
+		// map = new HashMap<String, Object>();
+		// map.put("title",
+		// getResources().getString(R.string.title_detail_view));
+		// map.put("fragment",
+		// Fragment.instantiate(this, FragmentDetailView.class.getName()));
+		// data.add(map);
 
 		SimpleAdapter adapter = new SimpleAdapter(this, data,
 				android.R.layout.simple_spinner_dropdown_item,
@@ -109,11 +101,6 @@ public class MainActivity extends Activity implements
 
 	}
 
-	
-	
-	
-	
-		
 	/**
 	 * Backward-compatible version of {@link ActionBar#getThemedContext()} that
 	 * simply returns the {@link android.app.Activity} if

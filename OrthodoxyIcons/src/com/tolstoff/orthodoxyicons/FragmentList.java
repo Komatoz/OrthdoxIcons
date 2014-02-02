@@ -55,10 +55,10 @@ public class FragmentList extends Fragment implements ApiProcessicngListener {
 		imageLoader = ImageLoader.getInstance();
 		imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
 
-		yandexFotkiApi = FotkiConnectionAnd—aching.getInstance();
-		yandexFotkiApi.setContext(getActivity());
-		yandexFotkiApi.setListener(this);
-		yandexFotkiApi.execute();
+//		yandexFotkiApi = FotkiConnectionAnd—aching.getInstance();
+//		yandexFotkiApi.setContext(getActivity());
+//		yandexFotkiApi.setListener(this);
+//		yandexFotkiApi.execute();
 
 		listView = (ListView) listFragmentView.findViewById(android.R.id.list);
 
@@ -67,9 +67,9 @@ public class FragmentList extends Fragment implements ApiProcessicngListener {
 
 	public void ApiProcessinDone() {
 
-		imageUrls = yandexFotkiApi.getPreviewImageURL();
-		imageTitles = yandexFotkiApi.getTitleImage();
-		
+//		imageUrls = yandexFotkiApi.getPreviewImageURL();
+//		imageTitles = yandexFotkiApi.getTitleImage();
+//		
 		
 		((ListView) listView).setAdapter(new ItemAdapter());
 		listView.setOnItemClickListener(new OnItemClickListener() {

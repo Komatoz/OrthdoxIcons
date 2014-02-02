@@ -23,11 +23,12 @@ public class YandexApiHelper {
 	public void connectToGetCash() {
 		fotkiConnectionAnd—aching = new FotkiConnectionAnd—aching(context);
 		fotkiConnectionAnd—aching.execute(urlAlbumCollection);
-
 	}
 
 	public void setContex(Context context) {
 		this.context = context;
 	}
+	
+
 
 }

@@ -2,20 +2,23 @@ package com.tolstoff.orthodoxyicons;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBcache {
 	private static final String DATABASE_NAME = "OrthodoxIconsDB";
+	private static final String DATABASE_TABLE = "OrthidoxIconsMainTable";
 	private static final String COLUMN_TITLE = "titile";
 	private static final String COLUMN_PREVIEW_LIST = "preview";
 	private static final String COLUMN_PREVIEW_GALLERY = "gallery";
 	private static final String COLUMN_DETAIL = "detail";
 	private DBHelper dbHelper;
 	private Context context;
+	private SQLiteDatabase mDB;
 
 	public static final String DATABASE_CREATE_SCRIPT = "create table "
-			+ DATABASE_NAME + "(" + "id integer primary key autoincrement,"
+			+ DATABASE_TABLE + "(" + "id integer primary key autoincrement,"
 			+ COLUMN_TITLE + " text," + COLUMN_PREVIEW_LIST + " text,"
 			+ COLUMN_PREVIEW_GALLERY + " text," + COLUMN_DETAIL + " text"
 			+ ");";
@@ -26,31 +29,45 @@ public class DBcache {
 
 	}
 
-	private void WriteResult(String titleImage, String listImageUrls,
-			String galleryImageUrls, String detailImageUrls) {
+	public void open() {
 		dbHelper = new DBHelper(context);
+		mDB = dbHelper.getWritableDatabase();
+	}
 
+	public void close() {
+		if (dbHelper != null)
+			dbHelper.close();
+
+	}
+	
+	public void clear(){
+	mDB.execSQL("delete from " + DATABASE_TABLE);	
+		
+		
+	}
+
+	public void WriteResult(String titleImage, String listImageUrls,
+			String galleryImageUrls, String detailImageUrls) {
+		// dbHelper = new DBHelper(context);
+	//	LogT.log(titleImage +  " " + listImageUrls +  " " + galleryImageUrls +  " " + detailImageUrls);
 		ContentValues cv = new ContentValues();
-		SQLiteDatabase db;
 
-		try {
-			db = dbHelper.getWritableDatabase();
-			db.execSQL("delete from " + DATABASE_NAME);
-		}
-
-		catch (Exception e) {
-			LogT.log(e);
-
-		}
-
-		db = dbHelper.getWritableDatabase();
+//		try {
+//			// db = dbHelper.getWritableDatabase();
+//			mDB.execSQL("delete from " + DATABASE_TABLE);
+//		}
+//
+//		catch (Exception e) {
+//			LogT.log("DBCache: " + e);
+//
+//		}
 
 		cv.put(COLUMN_TITLE, titleImage);
 		cv.put(COLUMN_PREVIEW_LIST, listImageUrls);
 		cv.put(COLUMN_PREVIEW_GALLERY, galleryImageUrls);
 		cv.put(COLUMN_DETAIL, detailImageUrls);
 
-		db.insert(DATABASE_NAME, null, cv);
+		mDB.insert(DATABASE_TABLE, null, cv);
 
 		// //Тестовое чтение
 		//
@@ -85,20 +102,15 @@ public class DBcache {
 		// c.close();
 		//
 
-		dbHelper.close();
-
-		LogT.backupDB(context, DATABASE_NAME);
+		// LogT.backupDB(context, DATABASE_NAME);
 
 	}
 
-	  // получить все данные из таблицы DB_TABLE
-	  public Cursor getAllData() {
-	    return mDB.query(DB_TABLE, null, null, null, null, null, null);
-	  }
-	
-	
-	
-	
+	// получить все данные из таблицы DB_TABLE
+	public Cursor getAllData() {
+		return mDB.query(DATABASE_TABLE, null, null, null, null, null, null);
+	}
+
 	class DBHelper extends SQLiteOpenHelper {
 
 		public DBHelper(Context context) {
@@ -115,7 +127,7 @@ public class DBcache {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// TODO Auto-generated method stub
+	
 
 		}
 

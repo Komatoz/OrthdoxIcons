@@ -34,7 +34,7 @@ public class FragmentDetailView extends Fragment {
 	protected ImageLoader imageLoader;
 	ViewPager pager;
 	
-	YandexFotkiApi yandexFotkiApi;
+//	YandexFotkiApi yandexFotkiApi;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,18 +51,18 @@ public class FragmentDetailView extends Fragment {
 				.bitmapConfig(Bitmap.Config.RGB_565).considerExifParams(true)
 				.displayer(new FadeInBitmapDisplayer(300)).build();
 
-		imageLoader = ImageLoader.getInstance();
-		imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
-		
-		yandexFotkiApi = YandexFotkiApi.getInstance();
-		yandexFotkiApi.setContext(getActivity());
-		imageUrls=yandexFotkiApi.getDetailImageUrls();
-
-		pager = (ViewPager) deatailFragmentView.findViewById(R.id.pager);
-
-		pager.setAdapter(new ImagePagerAdapter(imageUrls));
-
-		pager.setCurrentItem(1);
+//		imageLoader = ImageLoader.getInstance();
+//		imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+//		
+//		yandexFotkiApi = YandexFotkiApi.getInstance();
+//		yandexFotkiApi.setContext(getActivity());
+//		imageUrls=yandexFotkiApi.getDetailImageUrls();
+//
+//		pager = (ViewPager) deatailFragmentView.findViewById(R.id.pager);
+//
+//		pager.setAdapter(new ImagePagerAdapter(imageUrls));
+//
+//		pager.setCurrentItem(1);
 
 		return deatailFragmentView;
 	}
